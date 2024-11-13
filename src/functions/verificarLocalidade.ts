@@ -5,9 +5,8 @@ import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import fs from 'fs';
 import path from "path";
 
-const estados = JSON.parse(fs.readFileSync(path.resolve(__dirname, './brazil-states.geojson'), 'utf-8'));
-
-function verificarLocalidade(coord: Coordenada): Localidade | null {
+async function verificarLocalidade(coord: Coordenada): Promise<Localidade | null> {
+    const estados = await JSON.parse(fs.readFileSync(path.resolve(__dirname, './brazil-states.geojson'), 'utf-8'));
     const ponto = point([coord.longitude, coord.latitude]);
     for (const estado of estados.features) {
         if (booleanPointInPolygon(ponto, estado.geometry)) {

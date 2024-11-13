@@ -1,11 +1,20 @@
-import verificarLocalidade from "./functions/verificarLocalidade";
-import Coordenada from "./types/Coordenada";
-import Localidade from "./types/Localidade";
+import dontenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import routes from './routes/_index';
 
 console.clear()
 
-const coord: Coordenada = { longitude: -55, latitude: -13 };
-console.log(coord)
+dontenv.config()
 
-const localidade: Localidade | null = verificarLocalidade(coord);
-console.log(localidade);
+const PORT = process.env.PORT || 3000;
+const app = express();
+
+app.use(cors())
+app.use(express.json())
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
+})
+
+app.use(routes)
