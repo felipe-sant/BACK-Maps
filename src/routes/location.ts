@@ -3,6 +3,7 @@ import location from '../controllers/LocationControler';
 
 const routes = Router();
 
-routes.get('/loc', location.getLocations)
+routes.post('/loc', location.getLocations)
+routes.get('/coord', location.getRandomLocation)
 
 export default routes

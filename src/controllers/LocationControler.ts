@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
 import Coordenada from "../types/Coordenada";
 import Localidade from '../types/Localidade';
-import verificarLocalidade from '../functions/verificarLocalidade';
+import verificarLocalidade from '../routes/functions/verificarLocalidade';
+import getRandomLocation from '../routes/functions/getRandomLocation';
 
 class LocationControler {
     public async getLocations(req: Request, res: Response) {
@@ -11,6 +12,16 @@ class LocationControler {
             const coord: Coordenada = { latitude, longitude }
             const local: Localidade | null = await verificarLocalidade(coord)
             res.status(200).json(local);
+        } catch (error) {
+            console.log(error)
+            res.status(400).json({ message: error });
+        }
+    }
+
+    public async getRandomLocation(req: Request, res: Response) {
+        try {
+            const coord: Coordenada = await getRandomLocation()
+            res.status(200).json(coord);
         } catch (error) {
             console.log(error)
             res.status(400).json({ message: error });

@@ -1,5 +1,5 @@
-import Coordenada from "../types/Coordenada";
-import Localidade from "../types/Localidade";
+import Coordenada from "../../types/Coordenada";
+import Localidade from "../../types/Localidade";
 import { point } from '@turf/helpers';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import fs from 'fs';
