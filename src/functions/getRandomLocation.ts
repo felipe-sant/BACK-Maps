@@ -1,4 +1,4 @@
-import Coordenada from "../../types/Coordenada";
+import Coordenada from "../types/Coordenada";
 import fs from 'fs';
 import path from "path";
 

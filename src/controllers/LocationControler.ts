@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import Coordenada from "../types/Coordenada";
 import Localidade from '../types/Localidade';
-import verificarLocalidade from '../routes/functions/verificarLocalidade';
-import getRandomLocation from '../routes/functions/getRandomLocation';
+import verificarLocalidade from '../functions/verificarLocalidade';
+import getRandomLocation from '../functions/getRandomLocation';
 
 class LocationControler {
     public async getLocations(req: Request, res: Response) {
