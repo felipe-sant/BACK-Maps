@@ -1,12 +1,13 @@
-import { Router, Request, Response } from 'express';
-import location from './location';
+import { Router } from "express";
+import coord from "./coordRoutes"
 
-const routes = Router();
+function indexRoutes() {
+    const routes = Router()
+    routes.use("/coord", coord)
+    routes.use((_, res) => {
+        res.status(404)
+    })
+    return routes
+}
 
-routes.use("/", location)
-
-routes.use((req: Request, res: Response) => {
-    res.status(404).json({ message: 'Not found' })
-})
-
-export default routes;
+export default indexRoutes()
