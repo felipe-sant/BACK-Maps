@@ -1,5 +1,4 @@
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import routes from './routes/_index';
 
@@ -18,7 +17,7 @@ const startServer = () => {
         console.log('\nRotas disponíveis:');
         console.table([
             { Método: 'GET', Rota: 'coord/location', Query: 'lat, lon', Sobre: 'Retorna o estado com base em uma coordenada' },
-            { Método: 'GET', Rota: 'coord/random', Query: 'state', Sobre: 'Retorna uma coordenada aleatória' }
+            { Método: 'GET', Rota: 'coord/randomCoord', Query: 'state', Sobre: 'Retorna uma coordenada aleatória' }
         ]);
     });
 };

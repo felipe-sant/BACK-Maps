@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import { point } from '@turf/helpers';
-import readStates from '../functions/readStates';
-import Coordinate from '../types/Coord';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import Locality from '../types/Locality';
 import getRandomState from '../functions/getRandomState';
 import getRandomCoordinateFromState from '../functions/getRandomCoordinateFromState';
+import IbgeAPi_malhas from '../api/IbgeAPI_malhas';
+import IbgeAPI_localidades from '../api/IbgeAPI_localidades';
+import UF from '../types/UF';
 
 class CoordController {
     public async getLocationCoord(req: Request, res: Response): Promise<void> {
@@ -16,20 +17,25 @@ class CoordController {
                 return
             }
 
-            const states = await readStates();
+            const states = await IbgeAPi_malhas.getBrasilStates();
+            if (!states) {
+                res.status(500).json({ error: 'Internal server error' });
+                return
+            }
             const coord = point([Number(lon), Number(lat)]);
 
             for (const state of states.features) {
                 if (booleanPointInPolygon(coord, state.geometry)) {
+                    const stateData: UF | undefined = await IbgeAPI_localidades.getUF(state.properties.codarea)
+                    if (!stateData) return
                     const locality: Locality = {
-                        state: state.properties.sigla,
+                        state: stateData.nome,
                         country: 'Brazil'
                     }
                     res.status(200).json(locality);
                     return
                 }
             }
-            
             res.status(404).json({ error: 'Location not found' });
         } catch (error) {
             console.log(error)
@@ -40,7 +46,11 @@ class CoordController {
     public async getRandomCoord(req: Request, res: Response) {
         try {
             const { state } = req.query;
-            const states = await readStates();
+            const states = await IbgeAPi_malhas.getBrasilStates();
+            if (!states) {
+                res.status(500).json({ error: 'Internal server error' });
+                return
+            }
 
             if (!state) {
                 const randomState = getRandomState(states);
@@ -49,7 +59,7 @@ class CoordController {
                 return
             }
 
-            const stateData = states.features.find((s: any) => s.properties.sigla === state);
+            const stateData = states.features.find((s: any) => s.properties.codarea === state);
             if (!stateData) {
                 res.status(404).json({ error: 'State not found' });
                 return
