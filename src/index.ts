@@ -17,8 +17,8 @@ const startServer = () => {
         console.log(`🚀 Servidor rodando em: http://localhost:${PORT}/`);
         console.log('\nRotas disponíveis:');
         console.table([
-            { Método: 'GET', Rota: '/location', Query: 'lat, lon' },
-            { Método: 'GET', Rota: '/random', Query: 'state' }
+            { Método: 'GET', Rota: 'coord/location', Query: 'lat, lon', Sobre: 'Retorna o estado com base em uma coordenada' },
+            { Método: 'GET', Rota: 'coord/random', Query: 'state', Sobre: 'Retorna uma coordenada aleatória' }
         ]);
     });
 };
