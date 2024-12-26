@@ -4,8 +4,8 @@ import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import Locality from '../types/Locality';
 import getRandomState from '../functions/getRandomState';
 import getRandomCoordinateFromState from '../functions/getRandomCoordinateFromState';
-import IbgeAPi_malhas from '../api/IbgeAPI_malhas';
-import IbgeAPI_localidades from '../api/IbgeAPI_localidades';
+import IbgeAPi_malhas from '../external_api/IbgeAPI_malhas';
+import IbgeAPI_localidades from '../external_api/IbgeAPI_localidades';
 import UF from '../types/UF';
 
 class CoordController {
