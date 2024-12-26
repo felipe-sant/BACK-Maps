@@ -7,6 +7,7 @@ import getRandomCoordinateFromState from '../functions/getRandomCoordinateFromSt
 import IbgeAPi_malhas from '../api/IbgeAPI_malhas';
 import IbgeAPI_localidades from '../api/IbgeAPI_localidades';
 import UF from '../types/UF';
+import Municipality from '../types/Municipality';
 
 class CoordController {
     public async getLocationCoord(req: Request, res: Response): Promise<void> {
@@ -22,18 +23,35 @@ class CoordController {
                 res.status(500).json({ error: 'Internal server error' });
                 return
             }
+
             const coord = point([Number(lon), Number(lat)]);
 
             for (const state of states.features) {
                 if (booleanPointInPolygon(coord, state.geometry)) {
+
                     const stateData: UF | undefined = await IbgeAPI_localidades.getUF(state.properties.codarea)
                     if (!stateData) return
-                    const locality: Locality = {
-                        state: stateData.nome,
-                        country: 'Brazil'
+
+                    const citys = await IbgeAPi_malhas.getCitysPerUF(state.properties.codarea);
+                    if (!citys) return
+
+                    for (const city of citys.features) {
+                        if (booleanPointInPolygon(coord, city.geometry)) {
+
+                            const municipality: Municipality | undefined = await IbgeAPI_localidades.getCity(city.properties.codarea);
+                            if (!municipality) return
+                            
+                            const locality: Locality = {
+                                state: stateData.nome,
+                                country: 'Brazil',
+                                municipality: municipality.nome,
+                                microregion: municipality.microrregiao.nome,
+                                mesoregion: municipality.microrregiao.mesorregiao.nome
+                            }
+                            res.status(200).json(locality);
+                            return
+                        }
                     }
-                    res.status(200).json(locality);
-                    return
                 }
             }
             res.status(404).json({ error: 'Location not found' });
