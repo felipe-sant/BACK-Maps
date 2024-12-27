@@ -68,7 +68,7 @@ class CoordController {
                 return
             }
 
-            if (!state) {
+            if (state === "undefined" || !state) {
                 const randomState = getRandomState(states);
                 const coordinates = getRandomCoordinateFromState(randomState);
                 res.status(200).json(coordinates);
