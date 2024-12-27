@@ -1,17 +1,15 @@
+import readFile from "../functions/readFile";
 import GeoJson from "../types/GeoJson";
 import UF from "../types/UF";
+import IbgeAPI from "./IbgeAPI";
 
-export default class IbgeAPi_malhas {
-    public static readonly baseURL_v3 = 'https://servicodados.ibge.gov.br/api/v3/malhas/';
-    public static readonly baseURL_v4 = 'https://servicodados.ibge.gov.br/api/v4/malhas/';
+export default class IbgeAPI_malhas {
+    public static readonly baseURL_v3 = IbgeAPI.baseURL + 'v3/malhas/';
+    public static readonly baseURL_v4 = IbgeAPI.baseURL + 'v4/malhas/';
 
     public static async getBrasilStates(): Promise<GeoJson | undefined> {
         try {
-            const query = {
-                formato: 'application/vnd.geo+json',
-                intrarregiao: 'UF'
-            }
-            const response = await (await fetch(this.baseURL_v3 + "paises/BR" + '?' + new URLSearchParams(query))).json() as Promise<GeoJson>;
+            const response = readFile('brazil-ufs.geojson');
             return response
         } catch (error) {
             console.error(error);
@@ -23,7 +21,8 @@ export default class IbgeAPi_malhas {
         try {
             const query = {
                 formato: 'application/vnd.geo+json',
-                intrarregiao: 'municipio'
+                intrarregiao: 'municipio',
+                qualidade: 'minima'
             }
             const response = await (await fetch(this.baseURL_v4 + `estados/${id}` + '?' + new URLSearchParams(query))).json() as Promise<GeoJson>;
             return response

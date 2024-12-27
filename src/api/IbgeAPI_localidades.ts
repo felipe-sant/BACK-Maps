@@ -1,3 +1,4 @@
+import readFile from "../functions/readFile";
 import Municipality from "../types/Municipality";
 import UF from "../types/UF";
 import IbgeAPI from "./IbgeAPI";
@@ -7,8 +8,8 @@ export default class IbgeAPI_localidades {
 
     public static async getUFs(): Promise<UF[] | []> {
         try {
-            const response = await fetch(this.baseURL + 'estados');
-            return await response.json();
+            const response = readFile('ufs.json') as UF[]
+            return response
         } catch (error) {
             console.error(error);
             return [];
