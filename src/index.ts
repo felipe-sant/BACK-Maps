@@ -11,9 +11,9 @@ app.use(express.json());
 app.use(routes());
 
 const startServer = () => {
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0',  () => {
         console.clear()
-        console.log(`🚀 Servidor rodando em: http://localhost:${PORT}/`);
+        console.log(`🚀 Servidor rodando na porta: ${PORT}`);
         console.log('\nRotas disponíveis:');
         console.table([
             { Método: 'GET', Rota: 'coord/location', Query: 'lat, lon', Sobre: 'Retorna o informações com base em uma coordenada' },

@@ -1,0 +1,6 @@
+{
+    "name": "My Codespace",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18",
+    "forwardPorts": [3001],
+    "postCreateCommand": "npm install"    
+}
