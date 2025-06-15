@@ -9,7 +9,7 @@ export default class IbgeAPI_malhas {
 
     public static async getBrasilStates(): Promise<GeoJson | undefined> {
         try {
-            const file = readFile("brazil-df")
+            const file = readFile("brazil-df.json")
             if (file) {
                 return file
             } else {
@@ -19,7 +19,7 @@ export default class IbgeAPI_malhas {
                     qualidade: 'minima'
                 }
                 const response = await (await fetch(this.baseURL_v4 + `paises/BR` + '?' + new URLSearchParams(query))).json() as Promise<GeoJson>;
-                createFile("brazil-df", JSON.stringify(response))
+                createFile("brazil-df.json", JSON.stringify(response))
                 return response
             }
         } catch (error) {
@@ -30,13 +30,19 @@ export default class IbgeAPI_malhas {
 
     public static async getCitysPerUF(id: string): Promise<GeoJson | undefined> {
         try {
-            const query = {
-                formato: 'application/vnd.geo+json',
-                intrarregiao: 'municipio',
-                qualidade: 'minima'
+            const file = readFile(`${id}-city.json`)
+            if (file) {
+                return file
+            } else {
+                const query = {
+                    formato: 'application/vnd.geo+json',
+                    intrarregiao: 'municipio',
+                    qualidade: 'minima'
+                }
+                const response = await (await fetch(this.baseURL_v4 + `estados/${id}` + '?' + new URLSearchParams(query))).json() as Promise<GeoJson>;
+                createFile(`${id}-city.json`, JSON.stringify(response))
+                return response
             }
-            const response = await (await fetch(this.baseURL_v4 + `estados/${id}` + '?' + new URLSearchParams(query))).json() as Promise<GeoJson>;
-            return response
         } catch (error) {
             console.error(error);
             return undefined;
