@@ -11,6 +11,7 @@ class CoordController {
     public async getLocationCoord(req: Request, res: Response): Promise<void> {
         try {
             const { lat, lon } = req.query;
+            console.log(lat, lon)
             if (!lat || !lon) {
                 res.status(400).json({ error: 'Latitude and longitude are required.' });
                 return;
@@ -80,6 +81,8 @@ class CoordController {
                 res.status(404).json({ error: 'State not found' });
                 return
             }
+
+            console.log(stateData.properties)
 
             const coordinates = getRandomCoordinateFromState(stateData);
             res.status(200).json(coordinates);
